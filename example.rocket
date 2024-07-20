@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rootElement>
+<tracks rows="10000" startRow="0" endRow="10000" rowsPerBeat="6"
+beatsPerMin="100">
+	<track name="Camera:FocalDist" folded="0" muteKeyCount="0"
+color="ff4fb292">
+		<key row="0" value="40.000000" interpolation="0" />
+	</track>
+	<track name="Camera:FocalLen" folded="0" muteKeyCount="0"
+color="ff4f71b2">
+		<key row="0" value="10.000000" interpolation="0" />
+	</track>
+	<track name="Global:FresnelPow" folded="0" muteKeyCount="0"
+color="ffb25091">
+		<key row="0" value="5.000000" interpolation="0" />
+	</track>
+	<track name="Global:Vignette" folded="0" muteKeyCount="0"
+color="ffa9b250">
+		<key row="0" value="0.000000" interpolation="0" />
+	</track>
+	<track name="Global:Fade" folded="0" muteKeyCount="0"
+color="ff60b250">
+		<key row="0" value="1.000000" interpolation="0" />
+	</track>
+	<track name="Scene:CamID" folded="0" muteKeyCount="0"
+color="ff22ff22">
+	</track>
+	<track name="Camera:Pos:X" folded="0" muteKeyCount="0"
+color="ffa9b250">
+		<key row="0" value="0.000000" interpolation="0" />
+	</track>
+	<track name="Camera:Pos:Y" folded="0" muteKeyCount="0"
+color="ff60b250">
+		<key row="0" value="20.000000" interpolation="0" />
+	</track>
+	<track name="Camera:Pos:Z" folded="0" muteKeyCount="0"
+color="ff4fb292">
+		<key row="0" value="40.000000" interpolation="0" />
+	</track>
+	<track name="Scene:CamParam" folded="0" muteKeyCount="0"
+color="ff22ff22">
+		<key row="0" value="0.000000" interpolation="0" />
+	</track>
+	<track name="Global:Scene" folded="0" muteKeyCount="0"
+color="ff4fb292">
+		<key row="0" value="0.000000" interpolation="0" />
+	</track>
+</tracks>
+	</rootElement>
