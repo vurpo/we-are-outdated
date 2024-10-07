@@ -30,12 +30,19 @@ void RenderMaterial::renderUsing() const {
   GX2SetShaderMode(GX2_SHADER_MODE_UNIFORM_BLOCK);
 
   if (texture) {
-    texture->renderUsing(group);
+    texture->renderUsing(group, 0);
+  }
+  if (texture2) {
+    texture2->renderUsing(group, 1);
   }
 }
 
-void RenderMaterial::setTexture(std::unique_ptr<RenderTexture> _texture) {
-  texture = std::move(_texture);
+void RenderMaterial::setTexture(std::unique_ptr<RenderTexture> _texture, size_t id) {
+  if (id==0) {
+    texture = std::move(_texture);
+  } else {
+    texture2 = std::move(_texture);
+  }
 }
 
 RenderMaterial::~RenderMaterial() {}

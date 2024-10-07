@@ -22,7 +22,7 @@ struct RenderMaterial {
 
   virtual ~RenderMaterial();
   virtual void renderUsing() const;
-  void setTexture(std::unique_ptr<RenderTexture> texture);
+  void setTexture(std::unique_ptr<RenderTexture> texture, size_t id);
   const int getBindingForBuffer(BufferType bt) const {
     return this->bindingForBuffer[bt];
   }
@@ -30,5 +30,6 @@ struct RenderMaterial {
   // protected:
   WHBGfxShaderGroup *group;
   std::unique_ptr<RenderTexture> texture;
+  std::unique_ptr<RenderTexture> texture2;
   int bindingForBuffer[BufferType::_MAX];
 };

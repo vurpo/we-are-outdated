@@ -16,6 +16,9 @@ layout(binding = 3) uniform View {
 layout(binding = 4) uniform ExtraParams {
     vec4 extra_params;
 };
+layout(binding = 5) uniform ScreenColor {
+    vec4 screen_color;
+};
 
 layout(location = 0) out vec2 out_texcoord;
 layout(location = 1) out vec3 out_pos;
@@ -23,6 +26,7 @@ layout(location = 2) out vec3 out_normal;
 layout(location = 3) out vec3 out_pos_camspace;
 layout(location = 4) out vec3 out_normal_camspace;
 layout(location = 5) out vec4 out_cam_params;
+layout(location = 6) out vec4 out_screen_color;
 
 void main()
 {
@@ -35,4 +39,5 @@ void main()
     gl_Position = projection * vec4(out_pos_camspace, 1.0);
     out_texcoord = in_texcoord;
     out_cam_params = extra_params;
+    out_screen_color = screen_color;
 }

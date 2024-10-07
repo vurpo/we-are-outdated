@@ -20,3 +20,14 @@ RenderMaterial_p createBlurMaterial() {
   return std::make_unique<RenderMaterial>("shaders/billboard.vert",
                                           "shaders/blur.frag", attribs);
 }
+
+RenderMaterial_p createEffectsMaterial()
+{
+  std::vector<AttribSpec> attribs;
+  attribs.push_back(AttribSpec{"in_position", BufferType::VERTEX,
+                               GX2_ATTRIB_FORMAT_FLOAT_32_32_32});
+  attribs.push_back(AttribSpec{"in_texcoord", BufferType::TEXCOORD,
+                               GX2_ATTRIB_FORMAT_FLOAT_32_32});
+  return std::make_unique<RenderMaterial>("shaders/billboard.vert",
+                                          "shaders/effects.frag", attribs);
+}

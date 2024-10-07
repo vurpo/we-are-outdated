@@ -21,7 +21,7 @@ enum BufferType {
   _MAX
 };
 
-enum UniformType { CAMERA_PROJECTION, TRANSFORM, BONE_TRANSFORM, CAMERA_VIEW };
+enum UniformType { CAMERA_PROJECTION, TRANSFORM, BONE_TRANSFORM, CAMERA_VIEW, LIGHT_COLOR };
 
 /**
  * Data related to a specific instance of a render object.
@@ -49,12 +49,14 @@ struct RenderView {
   RenderView();
   ~RenderView();
 
+  GX2RBuffer lightColorBuffer = {};
   GX2RBuffer projectionBuffer = {};
   GX2RBuffer viewBuffer = {};
   GX2RBuffer extraBuffer = {};
 
   void setUniformFloatMat(UniformType bt, const float *mat, size_t numFloats);
   void setExtraUniform(int index, glm::vec4 data);
+  void setUniformLightColor(float *color);
 };
 
 /**

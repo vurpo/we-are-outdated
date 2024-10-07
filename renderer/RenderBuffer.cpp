@@ -155,14 +155,24 @@ RenderBuffer::RenderBuffer(bool highPrecision, int width_override,
 
 void RenderBuffer::bindTarget(bool clear) {
   if (clear) {
-    GX2ClearColor(&colorBuffer, 0.5, 0.8, 1.0, 1.0);
+    GX2ClearColor(&colorBuffer, 0.0, 0.0, 0.0, 1.0);
     GX2ClearDepthStencilEx(&depthBuffer, depthBuffer.depthClear,
                            depthBuffer.stencilClear, GX2_CLEAR_FLAGS_DEPTH);
   }
   GX2SetContextState(contextState);
 }
-void RenderBuffer::unbindTarget() {
+void RenderBuffer::unbindTarget()
+{
+  GX2Invalidate(GX2_INVALIDATE_MODE_CPU_TEXTURE | GX2_INVALIDATE_MODE_COLOR_BUFFER, colorBuffer.surface.image,
+                colorBuffer.surface.imageSize);
   GX2DrawDone();
   GX2SetContextState(NULL);
   GX2Flush();
+}
+
+GX2Texture *RenderBuffer::getTexture() {
+  return &this->texture;
+}
+GX2ColorBuffer *RenderBuffer::getColorBuffer() {
+  return &this->colorBuffer;
 }

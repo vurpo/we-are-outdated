@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+#include "RenderTexture.h"
+
 struct SceneBase;
 struct RenderObject;
 struct RenderMaterial;
@@ -15,7 +17,7 @@ struct Renderer {
 public:
   Renderer();
   ~Renderer();
-  void renderFrame(SceneBase const &scene, RenderBuffer &rb);
+  void renderFrame(SceneBase const &scene, RenderBuffer &rb, std::vector<std::unique_ptr<RenderTexture>> &effectTextures);
   void addModel(Model const &model);
   void addModel(Model &&model);
 
@@ -31,11 +33,14 @@ private:
   std::vector<std::unique_ptr<RenderObject>> objectList;
   std::unique_ptr<RenderObject> composeQuad;
   std::unique_ptr<RenderObject> blurQuad;
+  std::unique_ptr<RenderObject> effectsQuad;
   std::unique_ptr<RenderMaterial> composeMaterial;
   std::unique_ptr<RenderMaterial> blurMaterial;
+  std::unique_ptr<RenderMaterial> effectsMaterial;
 
   std::unique_ptr<RenderBuffer> bufferA;
   std::unique_ptr<RenderBuffer> bufferB;
+  std::unique_ptr<RenderBuffer> effectsBuffer;
 
   std::vector<RenderInstance> instances;
   std::unique_ptr<RenderInstance> quadInstance;

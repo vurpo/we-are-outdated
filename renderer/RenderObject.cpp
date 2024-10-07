@@ -4,10 +4,12 @@
 #include "RenderMaterial.h"
 
 #include <dmae/mem.h>
+#include <coreinit/cache.h>
 
 #include <gx2/draw.h>
 #include <gx2/mem.h>
 #include <gx2/shaders.h>
+#include <gx2/state.h>
 #include <gx2r/draw.h>
 
 #include <whb/gfx.h>
@@ -107,6 +109,7 @@ struct RenderObjectImpl : RenderObject {
     GX2RSetVertexUniformBlock(const_cast<GX2RBuffer *>(&view.viewBuffer), 3, 0);
     GX2RSetVertexUniformBlock(const_cast<GX2RBuffer *>(&view.extraBuffer), 4,
                               0);
+    GX2RSetVertexUniformBlock(const_cast<GX2RBuffer *>(&view.lightColorBuffer), 5, 0);
     GX2DrawEx(GX2_PRIMITIVE_MODE_TRIANGLES, positionBuffer.elemCount, 0, 1);
   }
 
@@ -276,6 +279,13 @@ RenderView::RenderView() {
   viewBuffer.elemCount = 1;
   GX2RCreateBuffer(&viewBuffer);
 
+  lightColorBuffer.flags =
+      GX2R_RESOURCE_BIND_UNIFORM_BLOCK | GX2R_RESOURCE_USAGE_CPU_READ |
+      GX2R_RESOURCE_USAGE_CPU_WRITE | GX2R_RESOURCE_USAGE_GPU_READ;
+  lightColorBuffer.elemSize = 4 * 4;
+  lightColorBuffer.elemCount = 1;
+  GX2RCreateBuffer(&lightColorBuffer);
+
   extraBuffer.flags =
       GX2R_RESOURCE_BIND_UNIFORM_BLOCK | GX2R_RESOURCE_USAGE_CPU_READ |
       GX2R_RESOURCE_USAGE_CPU_WRITE | GX2R_RESOURCE_USAGE_GPU_READ;
@@ -289,6 +299,7 @@ RenderView::~RenderView() {
   GX2RDestroyBufferEx(&projectionBuffer, GX2R_RESOURCE_BIND_NONE);
   GX2RDestroyBufferEx(&viewBuffer, GX2R_RESOURCE_BIND_NONE);
   GX2RDestroyBufferEx(&extraBuffer, GX2R_RESOURCE_BIND_NONE);
+  GX2RDestroyBufferEx(&lightColorBuffer, GX2R_RESOURCE_BIND_NONE);
 }
 
 void RenderView::setUniformFloatMat(UniformType bt, const float *mat,
@@ -313,10 +324,10 @@ void RenderView::setUniformFloatMat(UniformType bt, const float *mat,
 }
 
 void RenderView::setExtraUniform(int index, glm::vec4 data) {
-  if (index >= 4) {
-    WHBLogPrintf("Extra uniform index out of range");
-    return;
-  }
+  // if (index >= 5) {
+  //   WHBLogPrintf("Extra uniform index out of range");
+  //   return;
+  // }
   GX2Invalidate(GX2_INVALIDATE_MODE_CPU | GX2_INVALIDATE_MODE_UNIFORM_BLOCK,
                 (void *)&extraBuffer, 4 * 4);
   float *bufferData =
@@ -325,4 +336,15 @@ void RenderView::setExtraUniform(int index, glm::vec4 data) {
                 (void *)&extraBuffer, 4 * 4);
   swap_memcpy(bufferData, glm::value_ptr(data), 4 * 4);
   GX2RUnlockBufferEx(&extraBuffer, GX2R_RESOURCE_BIND_UNIFORM_BLOCK);
+}
+
+void RenderView::setUniformLightColor(float *color) {
+  GX2Invalidate(GX2_INVALIDATE_MODE_CPU | GX2_INVALIDATE_MODE_UNIFORM_BLOCK,
+                (void *)&lightColorBuffer, 4 * 4);
+  float *bufferData =
+      (float *)GX2RLockBufferEx(&lightColorBuffer, GX2R_RESOURCE_BIND_UNIFORM_BLOCK);
+  GX2Invalidate(GX2_INVALIDATE_MODE_CPU | GX2_INVALIDATE_MODE_UNIFORM_BLOCK,
+                (void *)&lightColorBuffer, 4 * 4);
+  swap_memcpy(bufferData, color, 4 * 4);
+  GX2RUnlockBufferEx(&lightColorBuffer, GX2R_RESOURCE_BIND_UNIFORM_BLOCK);
 }

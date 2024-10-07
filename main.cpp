@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
   int currentScene = -1000;
   WHBLogPrint("Hello World! Logging initialised.");
   {
-    auto music = MusicPlayer(WIIU_PATH_PREFIX "assets/pulse.ogg", 0.0f);
+    auto music = MusicPlayer(WIIU_PATH_PREFIX "assets/music.ogg", 0.0f);
 
     // Create the assets repository
     auto assets = Assets();
@@ -106,15 +106,24 @@ int main(int argc, char **argv) {
     renderer.addModels(assets.createModels());
     std::unique_ptr<SceneBase> scene;
 
+    // Sorry about ruining the separation of concerns
+    std::vector<std::unique_ptr<RenderTexture>> effectTextures;
+    effectTextures.push_back(std::make_unique<RenderTexture>("assets/vurpo-intro.png"));
+    effectTextures.push_back(std::make_unique<RenderTexture>("assets/colorbars.png"));
+    effectTextures.push_back(std::make_unique<RenderTexture>("assets/cube.png"));
+    effectTextures.push_back(std::make_unique<RenderTexture>("assets/square.png"));
+    effectTextures.push_back(std::make_unique<RenderTexture>("assets/spiral.png"));
+    effectTextures.push_back(std::make_unique<RenderTexture>("assets/text1.png"));
+    effectTextures.push_back(std::make_unique<RenderTexture>("assets/text2.png"));
+    effectTextures.push_back(std::make_unique<RenderTexture>("assets/text3.png"));
+    effectTextures.push_back(std::make_unique<RenderTexture>("assets/scroller.png"));
+
     WHBLogPrintf("Begin updating...");
 #ifdef SYNC_PLAYER
     music.play();
 #endif
     createSyncHandler(
-        "sync_tracks/", SYNC_IP, music,
-        (60.0f / 100.0f) /
-            6.0f // 100 BPM, 8 rows per beat. unsure if FP math would cause
-                 // drift by being not 100% accurate, should be fine tho
+        "sync_tracks/", SYNC_IP, music, (60.f/50.f)/16.
     );
     size_t frameCounter = 0;
     float lastTime = 0.0f;
@@ -135,7 +144,7 @@ int main(int argc, char **argv) {
       // Update scene
       if (scene) {
         scene->update(music.currentTime());
-        renderer.renderFrame(*scene, renderBuffer);
+        renderer.renderFrame(*scene, renderBuffer, effectTextures);
       }
 
 #ifdef SYNC_PLAYER

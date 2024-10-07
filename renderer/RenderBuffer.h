@@ -15,6 +15,8 @@ struct RenderBuffer {
   void bindTarget(bool clear = true);
   void unbindTarget();
   void renderUsing(const WHBGfxShaderGroup *group, int binding = 0);
+  GX2Texture *getTexture();
+  GX2ColorBuffer *getColorBuffer();
 
 private:
   GX2Texture texture;

@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(wiiu_demo C CXX)
+project(outdated_wiiu_demo C CXX)
 
 # WUHB metadata
-set(WUHB_TITLE "Immaterial" CACHE STRING "Title of the WUHB package")
-set(WUHB_LONGTITLE "Immaterial" CACHE STRING "Long title of the WUHB package")
-set(WUHB_AUTHOR "Slipstream and SVatG" CACHE STRING "Author of the WUHB package")
+set(WUHB_TITLE "We Are Outdated" CACHE STRING "Title of the WUHB package")
+set(WUHB_LONGTITLE "We Are Outdated" CACHE STRING "Long title of the WUHB package")
+set(WUHB_AUTHOR "vurpo" CACHE STRING "Author of the WUHB package")
 set(WUHB_ICON "../icon.png" CACHE STRING "Icon of the WUHB package (128x128)")
 
 # We don't use these, we just let the banner during load be the icon, which looks cute
@@ -130,10 +130,10 @@ add_custom_target(wuhb
     COMMAND ${CMAKE_COMMAND} --build . --target clean_install
 
     # 2) make test, to build shader cache, define -DSHADER_BUILD=1 so it does that and then quits
-    COMMAND ${CMAKE_COMMAND} -DSHADER_BUILD=ON -DWUHB_BUILD=OFF . 
-    COMMAND ${CMAKE_COMMAND} --build . --target clean
-    COMMAND ${CMAKE_COMMAND} --build . --target test
-    COMMAND ${CMAKE_COMMAND} -DSHADER_BUILD=OFF -DWUHB_BUILD=OFF .
+    # COMMAND ${CMAKE_COMMAND} -DSHADER_BUILD=ON -DWUHB_BUILD=OFF . 
+    # COMMAND ${CMAKE_COMMAND} --build . --target clean
+    # COMMAND ${CMAKE_COMMAND} --build . --target test
+    # COMMAND ${CMAKE_COMMAND} -DSHADER_BUILD=OFF -DWUHB_BUILD=OFF .
 
     # 3) make install, with WUHB_BUILD=1 defined, which changes paths to point to romfs and disables the shader compiler
     COMMAND ${CMAKE_COMMAND} -DSHADER_BUILD=OFF -DWUHB_BUILD=ON .
@@ -149,10 +149,16 @@ add_custom_target(wuhb
     COMMAND cp -r "${CMAKE_INSTALL_PREFIX}/shader_cache" "${CMAKE_CURRENT_BINARY_DIR}/content"
 
     # 5) now we can build the wuhb package
-    COMMAND wuhbtool --content content --short-name '${WUHB_TITLE}' --name '${WUHB_LONGTITLE}' --author '${WUHB_AUTHOR}' --icon '${WUHB_ICON}' "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.rpx" "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.wuhb" 
+    COMMAND wuhbtool --content content --short-name "${WUHB_TITLE}" --name "${WUHB_LONGTITLE}" --author "${WUHB_AUTHOR}" --icon "${WUHB_ICON}" "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.rpx" "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.wuhb" 
 
     # 6) clean up the content directory
     COMMAND rm -rf "${CMAKE_CURRENT_BINARY_DIR}/content"
+)
+# target that builds the wuhb package
+# sorry about using cmake as a shell script
+add_custom_target(cmake_test
+    # 5) now we can build the wuhb package
+    COMMAND echo "${WUHB_TITLE}" "${WUHB_LONGTITLE}"
 )
 
 add_custom_target(wuhb_deploy
